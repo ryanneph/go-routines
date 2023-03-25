@@ -48,13 +48,19 @@ func main() {
 			//   - or break from the loop and consequently end the goroutine
 			for task := range task_channel {
 				fmt.Printf("Worker %d processing task %+v\n", worker_id, task)
-				time.Sleep(100 * time.Millisecond) // simulate some workload
+
+				// Do some serious "work" to stress the CPU and force go to use more cores!
+				sum := 0;
+				for k := 0; k < 10000000000; k++ {
+					sum += 1;
+				}
+				fmt.Printf("sum %d\n", sum);
 			}
 		}()
 	}
 
 	// Now let's create some tasks and send them to the workers
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000000; i++ {
 		task := TaskData{
 			id: i,
 			url: "http://just_some_url.iguess",
